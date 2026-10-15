@@ -1,0 +1,9 @@
+* {{
+    bg:       {background}F0;
+    bg-solid: {background};
+    bg-alt:   {color8}55;
+    fg:       {foreground};
+    accent:   {color4};
+    muted:    {color8};
+    urgent:   {color1};
+}}

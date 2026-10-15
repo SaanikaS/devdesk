@@ -1,0 +1,158 @@
+# ═══════════════════════════════════════════════════════════
+#  devdesk · i3 config  (needs i3 >= 4.22 for built-in gaps)
+#  Every "bindsym ... # description" line shows up in the
+#  Super+F1 cheat-sheet automatically.
+# ═══════════════════════════════════════════════════════════
+
+set $mod Mod4
+set $alt Mod1
+set $bin ~/.local/bin
+set $term kitty
+
+font pango:JetBrainsMono Nerd Font 10
+floating_modifier $mod
+
+# ── Colours (pulled from the wallpaper by pywal via Xresources) ──
+set_from_resource $bg      i3wm.background #1e1e2e
+set_from_resource $fg      i3wm.foreground #cdd6f4
+set_from_resource $accent  i3wm.color4     #89b4fa
+set_from_resource $accent2 i3wm.color5     #cba6f7
+set_from_resource $muted   i3wm.color8     #6c7086
+set_from_resource $urgent  i3wm.color1     #f38ba8
+
+#                         border   bg       text    indicator child_border
+client.focused            $accent  $accent  $bg     $accent2  $accent
+client.focused_inactive   $muted   $muted   $fg     $muted    $muted
+client.unfocused          $bg      $bg      $muted  $bg       $bg
+client.urgent             $urgent  $urgent  $bg     $urgent   $urgent
+client.placeholder        $bg      $bg      $fg     $bg       $bg
+client.background         $bg
+
+# ── Window decorations ──
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders smart
+gaps inner 8
+gaps outer 2
+smart_gaps on
+focus_follows_mouse no
+
+# ── Workspaces ──
+set $ws1 "1:term"
+set $ws2 "2:web"
+set $ws3 "3:code"
+set $ws4 "4:files"
+set $ws5 "5:chat"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9:music"
+
+# ═════════════ Shortcuts: terminal / launcher ═════════════
+bindsym $mod+Return exec $term                                   # Open terminal
+bindsym $mod+d exec rofi -show drun                              # App launcher
+bindsym $mod+Shift+d exec rofi -show run                         # Run command
+bindsym $mod+Tab exec rofi -show window                          # Window switcher (fuzzy)
+bindsym $mod+F1 exec $bin/keybinds                               # Show this cheat-sheet
+bindsym $mod+Shift+q kill                                        # Close window
+
+# ═════════════ Shortcuts: window / workspace switching ═════════════
+bindsym $mod+h focus left                                        # Focus left
+bindsym $mod+j focus down                                        # Focus down
+bindsym $mod+k focus up                                          # Focus up
+bindsym $mod+l focus right                                       # Focus right
+bindsym $mod+Shift+h move left                                   # Move window left
+bindsym $mod+Shift+j move down                                   # Move window down
+bindsym $mod+Shift+k move up                                     # Move window up
+bindsym $mod+Shift+l move right                                  # Move window right
+bindsym $mod+b split h                                           # Next window opens beside
+bindsym $mod+v split v                                           # Next window opens below
+bindsym $mod+f fullscreen toggle                                 # Fullscreen
+bindsym $mod+s layout stacking                                   # Layout: stacking
+bindsym $mod+w layout tabbed                                     # Layout: tabbed
+bindsym $mod+e layout toggle split                               # Layout: split
+bindsym $mod+Shift+space floating toggle                         # Toggle floating
+bindsym $mod+space focus mode_toggle                             # Switch tiling/floating focus
+bindsym $mod+a focus parent                                      # Focus parent container
+bindsym $mod+minus scratchpad show                               # Show scratchpad
+bindsym $mod+Shift+minus move scratchpad                         # Send to scratchpad
+bindsym $mod+grave workspace back_and_forth                      # Jump to previous workspace
+bindsym $mod+Ctrl+Right workspace next                           # Next workspace
+bindsym $mod+Ctrl+Left workspace prev                            # Previous workspace
+bindsym $mod+r mode "resize"                                     # Resize mode (h/j/k/l, Esc to exit)
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+
+mode "resize" {
+    bindsym h resize shrink width 5 px or 5 ppt
+    bindsym j resize grow height 5 px or 5 ppt
+    bindsym k resize shrink height 5 px or 5 ppt
+    bindsym l resize grow width 5 px or 5 ppt
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# ═════════════ Shortcuts: screenshots ═════════════
+bindsym Print exec $bin/screenshot full                          # Screenshot: whole screen
+bindsym Shift+Print exec $bin/screenshot area                    # Screenshot: select area
+bindsym $mod+Print exec $bin/screenshot window                   # Screenshot: active window
+bindsym Ctrl+Print exec $bin/screenshot clip                     # Screenshot: area -> clipboard only
+bindsym $mod+Shift+s exec $bin/screenshot area                   # Screenshot: select area
+
+# ═════════════ Shortcuts: theme + productivity ═════════════
+bindsym $mod+n exec $bin/set-wallpaper --random                  # New random wallpaper (re-themes everything)
+bindsym $mod+Shift+n exec $bin/set-wallpaper --pick              # Pick wallpaper (re-themes everything)
+bindsym $mod+p exec $bin/pomodoro toggle                         # Pomodoro timer on/off
+bindsym $mod+Shift+p exec $bin/pomodoro status                   # Pomodoro status
+bindsym $mod+i exec $bin/sysstat --notify                        # Popup CPU / RAM / battery
+bindsym $mod+Ctrl+l exec i3lock -f -c 1e1e2e                     # Lock screen
+bindsym $mod+Shift+c reload                                      # Reload i3 config
+bindsym $mod+Shift+r restart                                     # Restart i3 in place
+bindsym $mod+Shift+e exec $bin/powermenu                         # Power menu
+
+# ═════════════ Media keys ═════════════
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+# ═════════════ Automatic workspace assignment ═════════════
+assign [class="(?i)^(firefox|google-chrome|brave-browser|chromium)$"]   $ws2
+assign [class="(?i)^(code|code-oss|vscodium|jetbrains-.*)$"]            $ws3
+assign [class="(?i)^(thunar|nautilus|pcmanfm|dolphin)$"]                $ws4
+assign [class="(?i)^(discord|slack|telegram.*|signal)$"]                $ws5
+for_window [class="(?i)^spotify$"] move to workspace $ws9
+
+# Floating dialogs
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [class="(?i)^(pavucontrol|nm-connection-editor|blueman-manager)$"] floating enable
+
+# ═════════════ Autostart ═════════════
+exec --no-startup-id $bin/set-wallpaper --restore
+exec --no-startup-id $bin/perf-watch
+exec --no-startup-id dunst
+exec --no-startup-id nm-applet
+exec_always --no-startup-id $bin/launch-polybar
